@@ -15,4 +15,4 @@
   yojson
   lwt
   lwt.unix)
- (preprocess (pps)))
+)
