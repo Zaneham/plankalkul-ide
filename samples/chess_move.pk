@@ -1,0 +1,14 @@
+; Chess piece movement validation - Linear notation
+; Inspired by Zuse's chess programs (ZIA-0367, ZIA-0410)
+;
+; Validates if a rook move is legal
+; V0 = start row, V1 = start col
+; V2 = end row, V3 = end col
+; Returns 1 if valid, 0 if invalid
+
+P Delta 1 rook_valid (V0, V1, V2, V3) => R0 {
+  0 => R0
+  ; Rook moves in straight lines only
+  V0 = V2 -> { 1 => R0 }  ; Same row (horizontal move)
+  V1 = V3 -> { 1 => R0 }  ; Same column (vertical move)
+}

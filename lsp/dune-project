@@ -1,0 +1,22 @@
+(lang dune 3.0)
+(name plankalkul-lsp)
+(version 0.1.0)
+
+(generate_opam_files true)
+
+(source (github Zaneham/plankalkul-ide))
+(license MIT)
+(authors "Zane Hambly")
+(maintainers "Zanehambly@gmail.com")
+
+(package
+ (name plankalkul-lsp)
+ (synopsis "Language Server for Plankalkül")
+ (description "LSP server for Konrad Zuse's Plankalkül programming language")
+ (depends
+  (ocaml (>= 4.14))
+  (dune (>= 3.0))
+  (linol (>= 0.5))
+  (linol-lwt (>= 0.5))
+  (yojson (>= 2.0))
+  (lwt (>= 5.0))))

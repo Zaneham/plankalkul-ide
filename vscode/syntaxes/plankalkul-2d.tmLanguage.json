@@ -1,0 +1,104 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Plankalkül 2D",
+  "scopeName": "source.plankalkul.2d",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#row-markers" },
+    { "include": "#operators" },
+    { "include": "#variables" },
+    { "include": "#numbers" },
+    { "include": "#type-annotations" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.semicolon.plankalkul",
+          "match": ";.*$"
+        },
+        {
+          "name": "comment.block.plankalkul",
+          "begin": "\\(\\*",
+          "end": "\\*\\)"
+        }
+      ]
+    },
+    "row-markers": {
+      "patterns": [
+        {
+          "name": "keyword.other.row-marker.expression.plankalkul",
+          "match": "^\\s*\\|"
+        },
+        {
+          "name": "keyword.other.row-marker.variable.plankalkul",
+          "match": "^V\\|"
+        },
+        {
+          "name": "keyword.other.row-marker.component.plankalkul",
+          "match": "^K\\|"
+        },
+        {
+          "name": "keyword.other.row-marker.type.plankalkul",
+          "match": "^S\\|"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.assignment.plankalkul",
+          "match": "=>"
+        },
+        {
+          "name": "keyword.operator.conditional.plankalkul",
+          "match": "->"
+        },
+        {
+          "name": "keyword.operator.comparison.plankalkul",
+          "match": "(<=|>=|!=|/=|<|>|=)"
+        },
+        {
+          "name": "keyword.operator.arithmetic.plankalkul",
+          "match": "[+\\-*/]"
+        },
+        {
+          "name": "keyword.operator.logical.plankalkul",
+          "match": "[&|!~]"
+        }
+      ]
+    },
+    "variables": {
+      "patterns": [
+        {
+          "name": "variable.parameter.input.plankalkul",
+          "match": "\\bV\\b"
+        },
+        {
+          "name": "variable.other.intermediate.plankalkul",
+          "match": "\\bZ\\b"
+        },
+        {
+          "name": "variable.other.result.plankalkul",
+          "match": "\\bR\\b"
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.integer.plankalkul",
+          "match": "\\b\\d+\\b"
+        }
+      ]
+    },
+    "type-annotations": {
+      "patterns": [
+        {
+          "name": "storage.type.plankalkul",
+          "match": "\\b[imxyn]\\b"
+        }
+      ]
+    }
+  }
+}

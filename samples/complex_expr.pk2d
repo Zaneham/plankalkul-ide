@@ -1,0 +1,13 @@
+; More complex expression in 2D notation
+; (V0 + V1) * V2 => R0
+;
+; Notice how the 2D layout makes variable bindings clear:
+; - Each V/Z/R in the expression row has its index directly below
+; - Types are shown in the S row
+
+ | ( V + V ) * V => R
+V|    0   1       2      0
+K|
+S|    i   i       i      i
+
+END

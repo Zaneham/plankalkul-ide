@@ -1,0 +1,18 @@
+; The LSP server needs access to the compiler's libraries.
+; Either:
+; 1. Install the compiler libraries via opam, or
+; 2. Build from a workspace that includes both projects
+;
+; For development, we'll assume the compiler is installed or
+; this is built from a combined workspace.
+
+(executable
+ (name server)
+ (public_name plankalkul-lsp)
+ (libraries
+  linol
+  linol-lwt
+  yojson
+  lwt
+  lwt.unix)
+ (preprocess (pps)))

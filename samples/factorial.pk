@@ -1,0 +1,9 @@
+; Factorial function - Linear notation
+; Computes V0! using a W1 loop
+
+factorial (V0) => R0 {
+  1 => R0
+  W1(V0) => Z0 {
+    R0 * (Z0 + 1) => R0
+  }
+}

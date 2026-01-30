@@ -1,0 +1,9 @@
+; Simple addition - Zuse's 2D notation
+; Each column aligns variable with its index and type
+
+ | V + V => R
+V|  0   1      0
+K|
+S|  i   i      i
+
+END

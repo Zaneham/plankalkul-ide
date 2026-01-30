@@ -1,0 +1,9 @@
+; Simple assignment in 2D notation
+; V0 => R0 (copy input to result)
+
+ | V => R
+V|  0    0
+K|
+S|  i    i
+
+END

@@ -1,0 +1,11 @@
+; Array access in 2D notation
+; V0[2] => R0
+;
+; The K row shows component indices for structured types
+
+ | V    => R
+V|  0        0
+K|  2
+S|  8.i      i
+
+END

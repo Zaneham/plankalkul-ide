@@ -1,0 +1,131 @@
+{
+  "name": "plankalkul",
+  "displayName": "Plankalkül",
+  "description": "Language support for Konrad Zuse's Plankalkül (1945) - the world's first high-level programming language",
+  "version": "0.1.0",
+  "publisher": "plankalkul",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Zaneham/plankalkul-ide"
+  },
+  "author": "Zane Hambly <Zanehambly@gmail.com>",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "keywords": [
+    "plankalkul",
+    "plankalkül",
+    "zuse",
+    "historical",
+    "vintage"
+  ],
+  "activationEvents": [
+    "onLanguage:plankalkul",
+    "onLanguage:plankalkul2d",
+    "onCustomEditor:plankalkul.editor2d"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "plankalkul",
+        "aliases": ["Plankalkül", "plankalkul", "pk"],
+        "extensions": [".pk"],
+        "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "plankalkul2d",
+        "aliases": ["Plankalkül 2D", "plankalkul2d"],
+        "extensions": [".pk2d"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "plankalkul",
+        "scopeName": "source.plankalkul",
+        "path": "./syntaxes/plankalkul.tmLanguage.json"
+      },
+      {
+        "language": "plankalkul2d",
+        "scopeName": "source.plankalkul.2d",
+        "path": "./syntaxes/plankalkul-2d.tmLanguage.json"
+      }
+    ],
+    "customEditors": [
+      {
+        "viewType": "plankalkul.editor2d",
+        "displayName": "Plankalkül 2D Editor",
+        "selector": [
+          {
+            "filenamePattern": "*.pk2d"
+          }
+        ],
+        "priority": "default"
+      }
+    ],
+    "commands": [
+      {
+        "command": "plankalkul.compileToC",
+        "title": "Plankalkül: Compile to C"
+      },
+      {
+        "command": "plankalkul.showPreview2D",
+        "title": "Plankalkül: Show 2D Preview"
+      },
+      {
+        "command": "plankalkul.convertTo2D",
+        "title": "Plankalkül: Convert to 2D Notation"
+      },
+      {
+        "command": "plankalkul.convertToLinear",
+        "title": "Plankalkül: Convert to Linear Notation"
+      }
+    ],
+    "configuration": {
+      "title": "Plankalkül",
+      "properties": {
+        "plankalkul.lsp.path": {
+          "type": "string",
+          "default": "",
+          "description": "Path to the Plankalkül LSP server executable"
+        },
+        "plankalkul.compiler.path": {
+          "type": "string",
+          "default": "",
+          "description": "Path to the Plankalkül compiler executable"
+        },
+        "plankalkul.editor2d.showGrid": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show grid lines in 2D editor"
+        },
+        "plankalkul.editor2d.fontSize": {
+          "type": "number",
+          "default": 14,
+          "description": "Font size in 2D editor"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@types/vscode": "^1.74.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.0"
+  }
+}

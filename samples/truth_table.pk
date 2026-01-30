@@ -1,0 +1,15 @@
+; AND gate truth table - Linear notation
+; Demonstrates Zuse's truth table syntax from ZIA-0368
+
+TABLE and_gate {
+  a b | result
+  + + | +
+  + - | -
+  - + | -
+  - - | -
+}
+
+; Use the truth table in a plan
+test_and (V0, V1) => R0 {
+  and_gate(V0, V1, 0) => R0
+}

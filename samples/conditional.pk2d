@@ -1,0 +1,11 @@
+; Conditional in 2D notation
+; V0 > V1 -> { V0 => R0 }
+;
+; The arrow -> indicates conditional execution
+
+ | V > V -> V => R
+V|  0   1     0      0
+K|
+S|  i   i     i      i
+
+END

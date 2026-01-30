@@ -1,0 +1,7 @@
+; Maximum of two values - Linear notation
+; Demonstrates conditional assignment
+
+max (V0, V1) => R0 {
+  V0 => R0
+  V1 > V0 -> { V1 => R0 }
+}

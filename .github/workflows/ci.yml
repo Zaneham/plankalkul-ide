@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-extension:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: vscode
+        run: npm ci
+
+      - name: Compile extension
+        working-directory: vscode
+        run: npm run compile
+
+      - name: Lint
+        working-directory: vscode
+        run: npm run lint || echo "Lint warnings found"
+
+  build-lsp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up OCaml
+        uses: ocaml/setup-ocaml@v2
+        with:
+          ocaml-compiler: 4.14.x
+
+      - name: Install dependencies
+        working-directory: lsp
+        run: opam install . --deps-only --yes
+
+      - name: Build LSP server
+        working-directory: lsp
+        run: opam exec -- dune build

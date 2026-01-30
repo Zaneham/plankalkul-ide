@@ -1,0 +1,6 @@
+(lang dune 3.0)
+
+; Include the compiler project so we can use its libraries
+(env
+ (_
+  (flags (:standard -w -unused-var-strict))))

@@ -1,0 +1,28 @@
+# OCaml
+_build/
+*.byte
+*.native
+*.install
+.merlin
+_opam/
+
+# Node
+node_modules/
+out/
+*.vsix
+
+# VS Code
+.vscode-test/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
