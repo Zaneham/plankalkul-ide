@@ -308,7 +308,7 @@ class lsp_server = object(_self)
 
       "Hello, I'm a language server for a 1945 programming language.
        Nice to meet you too." *)
-  method! on_req_initialize ~notify_back:_ _ =
+  method on_req_initialize ~notify_back:_ (_i : Lsp.InitializeParams.t) =
     let capabilities = Lsp.ServerCapabilities.create
       ~textDocumentSync:(`TextDocumentSyncKind Lsp.TextDocumentSyncKind.Full)
       ~hoverProvider:(`Bool true)
@@ -323,7 +323,7 @@ class lsp_server = object(_self)
 
       Every time you open a .pk file, the server springs into action.
       Zuse would be either proud or confused. Probably both. *)
-  method! on_notification_doc_did_open ~notify_back doc ~content =
+  method on_notif_doc_did_open ~notify_back (doc : Lsp.TextDocumentItem.t) ~content =
     let state = analyze_document doc.uri content in
     Hashtbl.replace documents (Lsp.DocumentUri.to_string doc.uri) state;
     let params = Lsp.PublishDiagnosticsParams.create
@@ -334,7 +334,8 @@ class lsp_server = object(_self)
 
       Real-time error checking for a language from the vacuum tube era.
       The future is now. *)
-  method! on_notification_doc_did_change ~notify_back doc _changes ~old_content:_ ~new_content =
+  method on_notif_doc_did_change ~notify_back (doc : Lsp.VersionedTextDocumentIdentifier.t)
+      _changes ~old_content:_ ~new_content =
     let state = analyze_document doc.uri new_content in
     Hashtbl.replace documents (Lsp.DocumentUri.to_string doc.uri) state;
     let params = Lsp.PublishDiagnosticsParams.create
@@ -344,14 +345,14 @@ class lsp_server = object(_self)
   (** Document closed — forget about it.
 
       Clean up after yourself. Unlike some languages from the 1970s. *)
-  method! on_notification_doc_did_close ~notify_back:_ doc =
+  method on_notif_doc_did_close ~notify_back:_ (doc : Lsp.TextDocumentIdentifier.t) =
     Hashtbl.remove documents (Lsp.DocumentUri.to_string doc.uri);
     Lwt.return ()
 
   (** Hover request — provide information.
 
       "What does W3 do?" Finally, an answer without reading German. *)
-  method! on_req_hover ~notify_back:_ ~id:_ ~uri ~pos _ =
+  method on_req_hover ~notify_back:_ ~id:_ ~uri ~pos ~workDoneToken:_ _ =
     let key = Lsp.DocumentUri.to_string uri in
     match Hashtbl.find_opt documents key with
     | None -> Lwt.return None
@@ -361,7 +362,8 @@ class lsp_server = object(_self)
 
       Autocomplete for a language from before autocomplete existed.
       Giving Zuse's creation the modern luxuries it deserves. *)
-  method! on_req_completion ~notify_back:_ ~id:_ ~uri:_ ~pos:_ ~ctx:_ _ =
+  method on_req_completion ~notify_back:_ ~id:_ ~uri:_ ~pos:_ ~ctx:_
+      ~workDoneToken:_ ~partialResultToken:_ _ =
     let items = get_completions () in
     Lwt.return (Some (`CompletionList (Lsp.CompletionList.create ~isIncomplete:false ~items ())))
 end
