@@ -25,7 +25,7 @@
 *)
 
 open Linol_lwt
-module Lsp = Linol_lwt.Lsp
+module Lsp = Linol.Lsp
 
 (** Document state — because even octogenarian languages need state management *)
 type doc_state = {
