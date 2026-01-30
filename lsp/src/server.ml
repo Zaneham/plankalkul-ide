@@ -66,7 +66,7 @@ let check_syntax text =
           ~end_:(Lsp.Position.create ~line:line_num ~character:(String.length line)))
         ~severity:Lsp.DiagnosticSeverity.Error
         ~source:"plankalkul"
-        ~message:"Unmatched closing brace. Zuse used very careful bracket matching. Be like Zuse."
+        ~message:(`String "Unmatched closing brace. Zuse used very careful bracket matching. Be like Zuse.")
         () :: !diagnostics;
 
     (* Check for = that should probably be => *)
@@ -90,7 +90,7 @@ let check_syntax text =
                   ~end_:(Lsp.Position.create ~line:line_num ~character:(i+1)))
                 ~severity:Lsp.DiagnosticSeverity.Hint
                 ~source:"plankalkul"
-                ~message:"Lonely '=' detected. In Plankalkül, assignment is '=>'. Equality is '='. This looks like neither."
+                ~message:(`String "Lonely '=' detected. In Plankalkül, assignment is '=>'. Equality is '='. This looks like neither.")
                 () :: !diagnostics
           end
         done
