@@ -25,13 +25,13 @@
 *)
 
 open Linol_lwt
-module Lsp = Lsp.Types
+module Lsp = Linol_lwt.Lsp
 
 (** Document state — because even octogenarian languages need state management *)
 type doc_state = {
-  uri: Lsp.DocumentUri.t;
+  uri: Lsp.Types.DocumentUri.t;
   text: string;
-  diagnostics: Lsp.Diagnostic.t list;
+  diagnostics: Lsp.Types.Diagnostic.t list;
 }
 
 (** The global document registry.
@@ -60,11 +60,11 @@ let check_syntax text =
     ) line;
 
     if !open_count < 0 then
-      diagnostics := Lsp.Diagnostic.create
-        ~range:(Lsp.Range.create
-          ~start:(Lsp.Position.create ~line:line_num ~character:0)
-          ~end_:(Lsp.Position.create ~line:line_num ~character:(String.length line)))
-        ~severity:Lsp.DiagnosticSeverity.Error
+      diagnostics := Lsp.Types.Diagnostic.create
+        ~range:(Lsp.Types.Range.create
+          ~start:(Lsp.Types.Position.create ~line:line_num ~character:0)
+          ~end_:(Lsp.Types.Position.create ~line:line_num ~character:(String.length line)))
+        ~severity:Lsp.Types.DiagnosticSeverity.Error
         ~source:"plankalkul"
         ~message:(`String "Unmatched closing brace. Zuse used very careful bracket matching. Be like Zuse.")
         () :: !diagnostics;
@@ -84,11 +84,11 @@ let check_syntax text =
             in
             let is_arrow = i < String.length line - 1 && line.[i+1] = '>' in
             if not is_comparison && not is_arrow then
-              diagnostics := Lsp.Diagnostic.create
-                ~range:(Lsp.Range.create
-                  ~start:(Lsp.Position.create ~line:line_num ~character:i)
-                  ~end_:(Lsp.Position.create ~line:line_num ~character:(i+1)))
-                ~severity:Lsp.DiagnosticSeverity.Hint
+              diagnostics := Lsp.Types.Diagnostic.create
+                ~range:(Lsp.Types.Range.create
+                  ~start:(Lsp.Types.Position.create ~line:line_num ~character:i)
+                  ~end_:(Lsp.Types.Position.create ~line:line_num ~character:(i+1)))
+                ~severity:Lsp.Types.DiagnosticSeverity.Hint
                 ~source:"plankalkul"
                 ~message:(`String "Lonely '=' detected. In Plankalkül, assignment is '=>'. Equality is '='. This looks like neither.")
                 () :: !diagnostics
@@ -153,13 +153,13 @@ let get_completions () =
 
   let items = List.concat [
     List.map (fun (label, detail) ->
-      Lsp.CompletionItem.create ~label ~kind:Lsp.CompletionItemKind.Keyword ~detail ()
+      Lsp.Types.CompletionItem.create ~label ~kind:Lsp.Types.CompletionItemKind.Keyword ~detail ()
     ) keywords;
     List.map (fun (label, detail) ->
-      Lsp.CompletionItem.create ~label ~kind:Lsp.CompletionItemKind.Variable ~detail ()
+      Lsp.Types.CompletionItem.create ~label ~kind:Lsp.Types.CompletionItemKind.Variable ~detail ()
     ) variables;
     List.map (fun (label, detail) ->
-      Lsp.CompletionItem.create ~label ~kind:Lsp.CompletionItemKind.Operator ~detail ()
+      Lsp.Types.CompletionItem.create ~label ~kind:Lsp.Types.CompletionItemKind.Operator ~detail ()
     ) operators;
   ] in
   items
@@ -171,11 +171,11 @@ let get_completions () =
     German academic paper. You're welcome. *)
 let get_hover text pos =
   let lines = String.split_on_char '\n' text |> Array.of_list in
-  let line_num = pos.Lsp.Position.line in
+  let line_num = pos.Lsp.Types.Position.line in
   if line_num >= Array.length lines then None
   else begin
     let line = lines.(line_num) in
-    let col = pos.Lsp.Position.character in
+    let col = pos.Lsp.Types.Position.character in
 
     (* Find the word at cursor position *)
     let start_col = ref col in
@@ -287,8 +287,8 @@ let get_hover text pos =
       in
       match info with
       | Some content ->
-        let markup = Lsp.MarkupContent.create ~kind:Lsp.MarkupKind.Markdown ~value:content in
-        Some (Lsp.Hover.create ~contents:(`MarkupContent markup) ())
+        let markup = Lsp.Types.MarkupContent.create ~kind:Lsp.Types.MarkupKind.Markdown ~value:content in
+        Some (Lsp.Types.Hover.create ~contents:(`MarkupContent markup) ())
       | None -> None
     end else None
   end
@@ -310,52 +310,54 @@ class lsp_server = object(_self)
 
       "Hello, I'm a language server for a 1945 programming language.
        Nice to meet you too." *)
-  method on_req_initialize ~notify_back:_ (_i : Lsp.InitializeParams.t) =
-    let capabilities = Lsp.ServerCapabilities.create
-      ~textDocumentSync:(`TextDocumentSyncKind Lsp.TextDocumentSyncKind.Full)
+  method on_req_initialize ~notify_back:_ _i =
+    let capabilities = Lsp.Types.ServerCapabilities.create
+      ~textDocumentSync:(`TextDocumentSyncKind Lsp.Types.TextDocumentSyncKind.Full)
       ~hoverProvider:(`Bool true)
-      ~completionProvider:(Lsp.CompletionOptions.create
+      ~completionProvider:(Lsp.Types.CompletionOptions.create
         ~triggerCharacters:[" "; "("]
         ())
       ()
     in
-    Lwt.return (Lsp.InitializeResult.create ~capabilities ())
+    Lwt.return (Lsp.Types.InitializeResult.create ~capabilities ())
 
   (** Document opened — time to analyze it.
 
       Every time you open a .pk file, the server springs into action.
       Zuse would be either proud or confused. Probably both. *)
-  method on_notif_doc_did_open ~notify_back (doc : Lsp.TextDocumentItem.t) ~content =
-    let state = analyze_document doc.uri content in
-    Hashtbl.replace documents (Lsp.DocumentUri.to_string doc.uri) state;
-    let params = Lsp.PublishDiagnosticsParams.create
-      ~uri:doc.uri ~diagnostics:state.diagnostics () in
+  method on_notif_doc_did_open ~notify_back doc ~content =
+    let uri = doc.Lsp.Types.TextDocumentItem.uri in
+    let state = analyze_document uri content in
+    Hashtbl.replace documents (Lsp.Types.DocumentUri.to_string uri) state;
+    let params = Lsp.Types.PublishDiagnosticsParams.create
+      ~uri ~diagnostics:state.diagnostics () in
     notify_back#send_notification (Lsp.Server_notification.PublishDiagnostics params)
 
   (** Document changed — re-analyze.
 
       Real-time error checking for a language from the vacuum tube era.
       The future is now. *)
-  method on_notif_doc_did_change ~notify_back (doc : Lsp.VersionedTextDocumentIdentifier.t)
-      _changes ~old_content:_ ~new_content =
-    let state = analyze_document doc.uri new_content in
-    Hashtbl.replace documents (Lsp.DocumentUri.to_string doc.uri) state;
-    let params = Lsp.PublishDiagnosticsParams.create
-      ~uri:doc.uri ~diagnostics:state.diagnostics () in
+  method on_notif_doc_did_change ~notify_back doc _changes ~old_content:_ ~new_content =
+    let uri = doc.Lsp.Types.VersionedTextDocumentIdentifier.uri in
+    let state = analyze_document uri new_content in
+    Hashtbl.replace documents (Lsp.Types.DocumentUri.to_string uri) state;
+    let params = Lsp.Types.PublishDiagnosticsParams.create
+      ~uri ~diagnostics:state.diagnostics () in
     notify_back#send_notification (Lsp.Server_notification.PublishDiagnostics params)
 
   (** Document closed — forget about it.
 
       Clean up after yourself. Unlike some languages from the 1970s. *)
-  method on_notif_doc_did_close ~notify_back:_ (doc : Lsp.TextDocumentIdentifier.t) =
-    Hashtbl.remove documents (Lsp.DocumentUri.to_string doc.uri);
+  method on_notif_doc_did_close ~notify_back:_ doc =
+    let uri = doc.Lsp.Types.TextDocumentIdentifier.uri in
+    Hashtbl.remove documents (Lsp.Types.DocumentUri.to_string uri);
     Lwt.return ()
 
   (** Hover request — provide information.
 
       "What does W3 do?" Finally, an answer without reading German. *)
   method on_req_hover ~notify_back:_ ~id:_ ~uri ~pos ~workDoneToken:_ _ =
-    let key = Lsp.DocumentUri.to_string uri in
+    let key = Lsp.Types.DocumentUri.to_string uri in
     match Hashtbl.find_opt documents key with
     | None -> Lwt.return None
     | Some doc -> Lwt.return (get_hover doc.text pos)
@@ -367,7 +369,7 @@ class lsp_server = object(_self)
   method on_req_completion ~notify_back:_ ~id:_ ~uri:_ ~pos:_ ~ctx:_
       ~workDoneToken:_ ~partialResultToken:_ _ =
     let items = get_completions () in
-    Lwt.return (Some (`CompletionList (Lsp.CompletionList.create ~isIncomplete:false ~items ())))
+    Lwt.return (Some (`CompletionList (Lsp.Types.CompletionList.create ~isIncomplete:false ~items ())))
 end
 
 (** Main entry point.

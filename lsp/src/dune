@@ -10,7 +10,6 @@
  (name server)
  (public_name plankalkul-lsp)
  (libraries
-  lsp
   linol
   linol-lwt
   yojson

@@ -16,7 +16,6 @@
  (depends
   (ocaml (>= 4.14))
   (dune (>= 3.0))
-  (lsp (>= 1.10))
   (linol (>= 0.5))
   (linol-lwt (>= 0.5))
   (yojson (>= 2.0))
