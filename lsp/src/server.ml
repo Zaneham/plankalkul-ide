@@ -304,6 +304,8 @@ let get_hover text pos =
 class lsp_server = object(_self)
   inherit Linol_lwt.Jsonrpc2.server
 
+  method spawn_query_handler f = Lwt.async f
+
   (** Initialize the server.
 
       "Hello, I'm a language server for a 1945 programming language.
