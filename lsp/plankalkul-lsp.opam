@@ -1,0 +1,21 @@
+opam-version: "2.0"
+name: "plankalkul-lsp"
+version: "0.1.0"
+synopsis: "Language Server for Plankalkül"
+description: "LSP server for Konrad Zuse's Plankalkül programming language"
+maintainer: "Zanehambly@gmail.com"
+authors: "Zane Hambly"
+license: "MIT"
+homepage: "https://github.com/Zaneham/plankalkul-ide"
+bug-reports: "https://github.com/Zaneham/plankalkul-ide/issues"
+depends: [
+  "ocaml" {>= "4.14"}
+  "dune" {>= "3.0"}
+  "linol" {>= "0.5"}
+  "linol-lwt" {>= "0.5"}
+  "yojson" {>= "2.0"}
+  "lwt" {>= "5.0"}
+]
+build: [
+  ["dune" "build" "-p" name "-j" jobs]
+]
