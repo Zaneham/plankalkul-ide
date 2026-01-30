@@ -10,7 +10,7 @@ Developer tools for Konrad Zuse's Plankalkül (1945) — the world's first high-
 
 Yes, this is a real IDE. Yes, it has syntax highlighting, hover documentation, and autocomplete. Yes, the language it supports was designed in the 1940s and never actually ran on hardware until the year 2000.
 
-I'm not the hero of this story — that honour belongs to **Prof. Raúl Rojas** and the **Freie Universität Berlin** team who first implemented Plankalkül in 2000, the archivists at the **Konrad Zuse Internet Archive** who preserved the manuscripts, and researchers like **Bram Bruines** who formalized the semantics.
+I'm not the hero of this story; that honour belongs to **Prof. Raúl Rojas** and the **Freie Universität Berlin** team who first implemented Plankalkül in 2000, the archivists at the **Konrad Zuse Internet Archive** who preserved the manuscripts, and researchers like **Bram Bruines** who formalized the semantics.
 
 I'm just someone who looked at a language older than FORTRAN, COBOL, and LISP combined and thought: "You know what this needs? *IntelliSense*."
 
