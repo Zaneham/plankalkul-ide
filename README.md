@@ -144,9 +144,17 @@ MIT — See [LICENSE](LICENSE)
 
 ## See Also
 
-- [Plankalkül Compiler](https://github.com/Zaneham/plankalkul-compiler) — The compiler powering this IDE
-- [Konrad Zuse Internet Archive](https://zuse.zib.de) — Original manuscripts
-- [Rojas et al. (2000)](http://www.zib.de/zuse/Inhalt/Programme/Plankalkuel/Plankalkuel-Report/Plankalkuel-Report.htm) — "Plankalkül: The First High-Level Programming Language and its Implementation"
+### This Project
+- [Plankalkül Compiler](https://github.com/Zaneham/plankalkul-compiler) — The OCaml compiler powering this IDE
+
+### Historical Resources
+- [Konrad Zuse Internet Archive](https://zuse.zib.de) — Original manuscripts (ZIA-0367, ZIA-0368, ZIA-0410)
+- [Rojas et al. (2000)](http://www.zib.de/zuse/Inhalt/Programme/Plankalkuel/Plankalkuel-Report/Plankalkuel-Report.htm) — First implementation, FU Berlin
+- [Bruines (2010)](https://www.cs.vu.nl/~dick/Bruines.pdf) — Formal semantics
+
+### Other Implementations
+- [Hovestar Plankalkül](http://www.hovestar.com/res/plankalkul/) — Reference implementation
+- [FU Berlin Tools](https://www.zib.de/zuse/Inhalt/Programme/Plankalkuel/) — Original 2000 implementation
 
 ---
 
