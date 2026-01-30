@@ -378,8 +378,11 @@ end
     for a programming language from 1945. Just another day at the office. *)
 let () =
   let server = new lsp_server in
-  let task = Linol_lwt.Jsonrpc2.create_stdio server in
-  match Linol_lwt.run task with
+  let task =
+    let open Linol_lwt in
+    Jsonrpc2.run (Jsonrpc2.create_stdio ~env:() server)
+  in
+  match Lwt_main.run task with
   | () -> ()
   | exception e ->
     Printf.eprintf "LSP server error: %s\n%!" (Printexc.to_string e);
