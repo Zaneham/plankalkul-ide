@@ -2,7 +2,7 @@
   "name": "plankalkul",
   "displayName": "Plankalkül",
   "description": "Language support for Konrad Zuse's Plankalkül (1945) - the world's first high-level programming language",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "zaneham",
   "repository": {
     "type": "git",
@@ -32,14 +32,25 @@
     "languages": [
       {
         "id": "plankalkul",
-        "aliases": ["Plankalkül", "plankalkul", "pk"],
-        "extensions": [".pk"],
+        "aliases": [
+          "Plankalkül",
+          "plankalkul",
+          "pk"
+        ],
+        "extensions": [
+          ".pk"
+        ],
         "configuration": "./language-configuration.json"
       },
       {
         "id": "plankalkul2d",
-        "aliases": ["Plankalkül 2D", "plankalkul2d"],
-        "extensions": [".pk2d"],
+        "aliases": [
+          "Plankalkül 2D",
+          "plankalkul2d"
+        ],
+        "extensions": [
+          ".pk2d"
+        ],
         "configuration": "./language-configuration.json"
       }
     ],
