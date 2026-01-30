@@ -3,7 +3,7 @@
   "displayName": "Plankalkül",
   "description": "Language support for Konrad Zuse's Plankalkül (1945) - the world's first high-level programming language",
   "version": "0.1.0",
-  "publisher": "plankalkul",
+  "publisher": "zaneham",
   "repository": {
     "type": "git",
     "url": "https://github.com/Zaneham/plankalkul-ide"
