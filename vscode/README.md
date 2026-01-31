@@ -64,6 +64,7 @@ The language was never implemented during Zuse's lifetime. This project brings i
 ## Links
 
 - [Compiler Repository](https://github.com/Zaneham/plankalkul-compiler)
+- [Package Manager (ppm)](https://github.com/Zaneham/ppm)
 - [Konrad Zuse Internet Archive](https://zuse.zib.de)
 - [Original Manuscripts (ZIA)](https://zuse.zib.de)
 
