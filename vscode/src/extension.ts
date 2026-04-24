@@ -12,6 +12,7 @@
 
 import * as vscode from 'vscode';
 import * as path from 'path';
+import * as fs from 'fs';
 import { LanguageClient, LanguageClientOptions, ServerOptions } from 'vscode-languageclient/node';
 import { PlankalkulEditor2DProvider } from './editor2d/editorProvider';
 
@@ -34,26 +35,37 @@ export function activate(context: vscode.ExtensionContext) {
     console.log('Plankalkül extension activated');
 }
 
-function startLanguageClient(context: vscode.ExtensionContext) {
+
+function resolveLanguageServerPath(context: vscode.ExtensionContext): string | undefined {
     const config = vscode.workspace.getConfiguration('plankalkul');
-    let serverPath = config.get<string>('lsp.path');
-
-    // Try to find the LSP server
-    if (!serverPath) {
-        // Look in common locations
-        const possiblePaths = [
-            path.join(context.extensionPath, '..', 'lsp', '_build', 'default', 'src', 'server.exe'),
-            path.join(context.extensionPath, '..', 'lsp', 'plankalkul-lsp.exe'),
-            'plankalkul-lsp', // In PATH
-        ];
-
-        for (const p of possiblePaths) {
-            // We'll just use the first one for now
-            // In production, we'd check if the file exists
-            serverPath = p;
-            break;
-        }
+    const configuredPath = config.get<string>('lsp.path');
+    if (configuredPath) {
+        return configuredPath;
     }
+
+    const bundledServer = getBundledServerPath(context);
+    const possiblePaths = [
+        bundledServer,
+        path.join(context.extensionPath, '..', 'lsp', '_build', 'default', 'src', 'server.exe'),
+        path.join(context.extensionPath, '..', 'lsp', 'plankalkul-lsp.exe'),
+    ].filter((p): p is string => Boolean(p));
+
+    return possiblePaths.find(p => fs.existsSync(p));
+}
+
+function getBundledServerPath(context: vscode.ExtensionContext): string | undefined {
+    const binaries: Record<string, string> = {
+        'linux-x64': 'plankalkul-lsp-linux-x64',
+        'darwin-x64': 'plankalkul-lsp-darwin-x64',
+        'darwin-arm64': 'plankalkul-lsp-darwin-arm64',
+        'win32-x64': 'plankalkul-lsp-windows-x64.exe',
+    };
+    const binaryName = binaries[`${process.platform}-${process.arch}`];
+    return binaryName ? path.join(context.extensionPath, 'bin', binaryName) : undefined;
+}
+
+function startLanguageClient(context: vscode.ExtensionContext) {
+    const serverPath = resolveLanguageServerPath(context);
 
     if (!serverPath) {
         vscode.window.showWarningMessage(
